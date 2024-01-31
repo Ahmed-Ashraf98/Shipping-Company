@@ -1,0 +1,69 @@
+﻿@model Shipping_Company.Models.Product
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<h1 class="text-primary">Add New Product</h1>
+
+<form method="post" asp-action="Create" id="MyForm">
+
+
+    <div asp-validation-summary="All"></div>
+    <div class="form-group my-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name"></span>
+    </div>
+
+    <div class="form-group my-3">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price"></span>
+    </div>
+
+
+
+    @*@Html.AntiForgeryToken();*@
+    @*this command is by default running either you put it or not  *@
+
+    <button type="submit" class="my-3 btn btn-outline-success">Create</button>
+
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(function () {
+
+            $("#MyForm").on('submit', function (e) {
+
+                e.preventDefault() // prevent the form's normal submission
+
+                var myData = {
+                    Name: $("[name='Name']").val(),
+                    Price: $("[name='Price']").val(),
+           
+                }
+
+                console.log(myData);
+                $.ajax({
+                    url: "/api/productapi/",
+                    method: "POST",
+                    data: JSON.stringify(myData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                })
+                    .done(function (response, status, jqxhr) {
+                        console.log("su");
+                    })
+                    .fail(function (jqxhr, status, error) {
+                        // this is the ""error"" callback
+                        console.log("fa");
+                    })
+            })
+        })
+    </script>
+}
